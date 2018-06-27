@@ -1,0 +1,109 @@
+# Tomcat
+server:
+    tomcat:
+        uri-encoding: UTF-8
+        max-threads: 1000
+        min-spare-threads: 30
+    port: 8090
+    servlet:
+        context-path: /connection
+
+# mysql
+spring:
+    # 环境 dev|test|prod
+    profiles:
+        active: dev
+    redis:
+        #database: 1
+           host: 10.1.11.118
+           port: 6390
+           password: 6390
+           database: 1
+           timeout: 30000
+           prefix: dev01
+           config:
+             maxIdle: 10
+             maxTotal: 100
+             minIdle: 4
+             maxWaitMillis: 60000
+    dubbo:
+        application:
+            name: connection
+        registry:
+            #address: zookeeper://10.1.11.92:2181
+            address: zookeeper://10.1.11.147:2888
+            #group: connection
+        provider:
+             threadpool : fixed #提供者固定线程池
+             timeout: 12000 #设置超时时间20秒
+             retries : 0 #超时后重连的问题
+        protocol:
+            port: 20886
+            dispatcher: all
+            threads: 500
+    data:
+      elasticsearch:
+        cluster-name: kafka #节点名字，默认elasticsearch
+        cluster-nodes: 10.1.11.147:9300 #节点地址，多个节点用逗号隔开
+        repositories:
+          enabled: true
+      #kafka配置
+    kafka:
+      bootstrap-servers: 10.1.11.147:9092
+      consumer:
+        group-id: bike-connection
+        enable-auto-commit: true
+        auto-offset-reset: earliest
+
+
+
+
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.baojia.connection.domain.po
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 0
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+    #数据库大写下划线转换
+    #capital-mode: true
+    # Sequence序列接口实现类配置
+    #key-generator: com.baomidou.mybatisplus.incrementer.OracleKeyGenerator
+    #逻辑删除配置
+    logic-delete-value: -1
+    logic-not-delete-value: 0
+    #自定义填充策略接口实现
+    #meta-object-handler: com.baomidou.springboot.xxx
+    #自定义SQL注入器
+    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #打印sql
+
+
+logging:
+  level: debug
+  level.io.renren: debug
+  path: logs/connection
+  file: connection.log
+
+
+#pagehelper
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+  returnPageInfo: check
+
+

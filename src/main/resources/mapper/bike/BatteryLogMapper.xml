@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baojia.connection.dao.BatteryLogMapper" >
+
+    <resultMap id="BaseResultMap" type="com.baojia.connection.domain.po.BatteryLog" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="battery_no" property="batteryNo" jdbcType="VARCHAR" />
+        <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+        <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="operate_content" property="operateContent" jdbcType="VARCHAR" />
+        <result column="operate_type" property="operateType" jdbcType="INTEGER" />
+        <result column="role" property="role" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, battery_no, operator_id, operator_name, create_time, operate_content, operate_type, role
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="Base_Column_List" />
+        from battery_log
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    
+    <select id="selectLog" resultMap="BaseResultMap" parameterType="com.baojia.connection.domain.dto.BatteryLogDto" >
+        select 
+        <include refid="Base_Column_List" />
+        from battery_log
+        <where>
+        	<if test="batteryNo != null and batteryNo != ''" >
+               	and battery_no = #{batteryNo,jdbcType=VARCHAR}
+            </if>
+            <if test="startTime != null and startTime != ''" >
+                and create_time <![CDATA[ >= ]]> #{startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime != null and endTime != ''" >
+                and create_time <![CDATA[ <= ]]> #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+</mapper>

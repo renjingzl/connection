@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: connection
+Implementation-Version: 1.0-SNAPSHOT
+Built-By: renjing
+Implementation-Vendor-Id: com.baojia
+Build-Jdk: 1.8.0_171
+Implementation-URL: http://www.example.com
+Created-By: Maven Integration for Eclipse
+
